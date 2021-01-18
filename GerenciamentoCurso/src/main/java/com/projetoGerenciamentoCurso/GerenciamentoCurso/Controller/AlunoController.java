@@ -39,17 +39,23 @@ public class AlunoController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<Aluno> salvarAluno(@RequestBody Aluno aluno) {
-		alunoRepository.save(aluno);
+		
+		if(aluno instanceof Aluno) {
+			
+			alunoRepository.save(aluno);
+			alunoService.retornaAluno(aluno);
+		}
+		else {
+			
+			ResponseEntity.badRequest();
+		}
+		
 		
 	
-		Map<String,List<Object>>alunoEvent = new HashMap<String, List<Object>>();
 		
-		alunoEvent.put("nome", Arrays.asList(aluno.getNome()));
-		alunoEvent.put("email", Arrays.asList(aluno.getEmail()));
-		alunoEvent.put("cpf", Arrays.asList(aluno.getCpf()));
-		alunoEvent.put("formaIngresso", Arrays.asList(aluno.getFormaIngresso()));
-		alunoEvent.put("turma", Arrays.asList(aluno.getTurma()));
-		alunoService.retornaAluno(aluno);
+		
+		
+		
 		return ResponseEntity.ok(aluno);
 	}
 
